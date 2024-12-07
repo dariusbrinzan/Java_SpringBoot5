@@ -11,8 +11,7 @@ import java.io.File;
 
 @Service
 @Profile("dev")
-public class DemoBankInitializationService implements BankInitializationService
-{
+public class DemoBankInitializationService implements BankInitializationService {
     public static final String DEMO_FEED_FILE_NAME = "default.feed";
 
     @Value("${feed.filename}")
@@ -23,10 +22,8 @@ public class DemoBankInitializationService implements BankInitializationService
 
     @Override
     @PostConstruct
-    public void createClientsForDemo()
-    {
-        if (fileName == null)
-        {
+    public void createClientsForDemo() {
+        if (fileName == null) {
             fileName = DEMO_FEED_FILE_NAME;
         }
 

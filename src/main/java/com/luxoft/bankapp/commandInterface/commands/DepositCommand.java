@@ -2,18 +2,16 @@ package com.luxoft.bankapp.commandInterface.commands;
 
 import com.luxoft.bankapp.exceptions.ActiveAccountNotSet;
 import com.luxoft.bankapp.model.Client;
+
 import java.util.Scanner;
 
-public class DepositCommand extends AbstractCommand
-{
-    public DepositCommand(int num)
-    {
+public class DepositCommand extends AbstractCommand {
+    public DepositCommand(int num) {
         super(num);
     }
 
     @Override
-    public void execute()
-    {
+    public void execute() {
         System.out.println("Enter client name:");
 
         Scanner s = new Scanner(System.in);
@@ -26,13 +24,10 @@ public class DepositCommand extends AbstractCommand
 
         Client client;
 
-        try
-        {
+        try {
             client = getBanking().getClient(clientName);
             client.deposit(Double.parseDouble(amount));
-        }
-        catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
     }

@@ -7,17 +7,14 @@ import com.luxoft.bankapp.model.Client;
 
 import java.util.Scanner;
 
-public class WithdrawCommand extends AbstractCommand
-{
+public class WithdrawCommand extends AbstractCommand {
 
-    public WithdrawCommand(int num)
-    {
+    public WithdrawCommand(int num) {
         super(num);
     }
 
     @Override
-    public void execute()
-    {
+    public void execute() {
         System.out.println("Enter client name:");
 
         Scanner s = new Scanner(System.in);
@@ -30,13 +27,10 @@ public class WithdrawCommand extends AbstractCommand
 
         Client client;
 
-        try
-        {
+        try {
             client = getBanking().getClient(clientName);
             client.withdraw(Double.parseDouble(amount));
-        }
-        catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
     }

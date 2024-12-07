@@ -6,30 +6,24 @@ import com.luxoft.bankapp.model.Client;
 
 import java.util.Scanner;
 
-public class FindClientCommand extends AbstractCommand
-{
+public class FindClientCommand extends AbstractCommand {
 
-    public FindClientCommand(int num)
-    {
+    public FindClientCommand(int num) {
         super(num);
     }
 
     @Override
-    public void execute()
-    {
+    public void execute() {
 
         System.out.println("Enter name of the client");
         Scanner s = new Scanner(System.in);
 
         String clientName = s.nextLine();
 
-        try
-        {
+        try {
             Client client = getBanking().getClient(clientName);
             System.out.println(client);
-        }
-        catch (ClientNotFoundException e)
-        {
+        } catch (ClientNotFoundException e) {
             System.out.println("Client wasn't found");
         }
     }

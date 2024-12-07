@@ -6,11 +6,9 @@ import org.springframework.context.annotation.*;
 
 @SpringBootApplication
 @PropertySource("classpath:clients.properties")
-public class BankApplication
-{
-	public static void main(String[] args)
-	{
-		SpringApplication.run(BankApplication.class, args);
-	}
+public class BankApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(BankApplication.class, args);
+    }
 
 }

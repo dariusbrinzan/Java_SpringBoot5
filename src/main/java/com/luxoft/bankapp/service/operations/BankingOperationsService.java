@@ -3,8 +3,7 @@ package com.luxoft.bankapp.service.operations;
 import com.luxoft.bankapp.model.Account;
 import com.luxoft.bankapp.model.Client;
 
-public interface BankingOperationsService
-{
+public interface BankingOperationsService {
     double getBalance(Client client);
 
     double getBalance(Account account);

@@ -8,8 +8,7 @@ import com.luxoft.bankapp.service.storage.Storage;
 import java.util.Map;
 import java.util.Set;
 
-public interface Banking
-{
+public interface Banking {
     void setStorage(Storage<Client> storage);
 
     Client addClient(Client c);

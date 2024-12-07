@@ -22,52 +22,41 @@ import java.util.Map;
 
 @Service
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class BankFeedServiceImpl implements BankFeedService
-{
+public class BankFeedServiceImpl implements BankFeedService {
     private Banking banking;
 
     @Autowired
-    public BankFeedServiceImpl(Banking banking)
-    {
+    public BankFeedServiceImpl(Banking banking) {
         this.banking = banking;
     }
 
     @Override
-    public void loadFeed(String folder)
-    {
+    public void loadFeed(String folder) {
         File[] files = new File(folder).listFiles(p -> p.getName().endsWith(".feed"));
 
-        if (files != null)
-        {
+        if (files != null) {
             Arrays.stream(files).forEach(this::loadFeed);
         }
     }
 
     @Override
-    public void loadFeed(File file)
-    {
-        try (BufferedReader reader = new BufferedReader(new FileReader("feeds/" + file.getName())))
-        {
-            while (reader.ready())
-            {
+    public void loadFeed(File file) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("feeds/" + file.getName()))) {
+            while (reader.ready()) {
                 Map<String, String> map = parseLine(reader.readLine());
                 banking.parseFeed(map);
             }
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private Map<String, String> parseLine(String line)
-    {
+    private Map<String, String> parseLine(String line) {
         Map<String, String> result = new HashMap<>();
 
         String[] properties = line.split(";");
 
-        for (String property : properties)
-        {
+        for (String property : properties) {
             String[] values = property.split("=");
             result.put(values[0], values[1]);
         }
@@ -76,62 +65,49 @@ public class BankFeedServiceImpl implements BankFeedService
     }
 
     @Override
-    public void saveFeed(String file)
-    {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("feeds/" + file)))
-        {
-            for (Client client : banking.getClients())
-            {
+    public void saveFeed(String file) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("feeds/" + file))) {
+            for (Client client : banking.getClients()) {
                 String clientInfo = collectFeedInfo(client, client.getClass()).delete(0, 1).toString();
 
-                for (Account account : client.getAccounts())
-                {
+                for (Account account : client.getAccounts()) {
                     StringBuilder accountInfo = new StringBuilder(clientInfo);
                     accountInfo.append(collectFeedInfo(account, account.getClass()));
                     writer.write(accountInfo.append("\n").toString());
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private StringBuilder collectFeedInfo(Object object, Class<?> clazz) throws IllegalAccessException, InvocationTargetException
-    {
+    private StringBuilder collectFeedInfo(Object object, Class<?> clazz) throws IllegalAccessException, InvocationTargetException {
         StringBuilder builder = new StringBuilder();
 
         Field[] declaredFields = clazz.getDeclaredFields();
 
         //Search for fields
-        for (Field field : declaredFields)
-        {
-            if (field.isAnnotationPresent(Feed.class) && !"accounts".equals(field.getName()))
-            {
+        for (Field field : declaredFields) {
+            if (field.isAnnotationPresent(Feed.class) && !"accounts".equals(field.getName())) {
                 field.setAccessible(true);
 
                 //Iterate recursively through collection field
-                if (Collection.class.isAssignableFrom(field.getType()))
-                {
-                    for (Object obj : (Collection) field.get(object))
-                    {
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    for (Object obj : (Collection) field.get(object)) {
                         builder.append(collectFeedInfo(obj, obj.getClass()));
                     }
                     continue;
                 }
 
                 //Object field
-                if (!field.getType().isPrimitive() && !String.class.equals(field.getType()))
-                {
+                if (!field.getType().isPrimitive() && !String.class.equals(field.getType())) {
                     builder.append(collectFeedInfo(field.get(object), field.getType()));
                 }
 
                 //Primitive field
                 Feed annotation = field.getAnnotation(Feed.class);
                 String name = annotation.value();
-                if (name.isEmpty())
-                {
+                if (name.isEmpty()) {
                     name = field.getName();
                 }
                 builder.append(";")
@@ -143,14 +119,11 @@ public class BankFeedServiceImpl implements BankFeedService
 
         //Search for methods
         Method[] declaredMethods = clazz.getDeclaredMethods();
-        for (Method method : declaredMethods)
-        {
-            if (method.isAnnotationPresent(Feed.class))
-            {
+        for (Method method : declaredMethods) {
+            if (method.isAnnotationPresent(Feed.class)) {
                 Feed annotation = method.getAnnotation(Feed.class);
                 String name = annotation.value();
-                if (name.isEmpty())
-                {
+                if (name.isEmpty()) {
                     name = method.getName().substring(3).toLowerCase();
                 }
                 builder.append(";")
@@ -161,21 +134,18 @@ public class BankFeedServiceImpl implements BankFeedService
         }
 
         //Search for fields in superclasses
-        if (clazz.getSuperclass() != null && !Object.class.equals(clazz.getSuperclass()))
-        {
+        if (clazz.getSuperclass() != null && !Object.class.equals(clazz.getSuperclass())) {
             builder.append(collectFeedInfo(object, clazz.getSuperclass()));
         }
 
         return builder;
     }
 
-    public void setBanking(Banking banking)
-    {
+    public void setBanking(Banking banking) {
         this.banking = banking;
     }
 
-    public Banking getBanking()
-    {
+    public Banking getBanking() {
         return banking;
     }
 }

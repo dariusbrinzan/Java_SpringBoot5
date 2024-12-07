@@ -1,19 +1,17 @@
 package com.luxoft.bankapp.commandInterface.commands;
 
 import com.luxoft.bankapp.model.Client;
+
 import java.util.Scanner;
 
-public class TransferCommand extends AbstractCommand
-{
+public class TransferCommand extends AbstractCommand {
 
-    public TransferCommand(int num)
-    {
+    public TransferCommand(int num) {
         super(num);
     }
 
     @Override
-    public void execute()
-    {
+    public void execute() {
         System.out.println("Enter sender name:");
 
         Scanner s = new Scanner(System.in);
@@ -32,15 +30,12 @@ public class TransferCommand extends AbstractCommand
         Client sender;
         Client receiver;
 
-        try
-        {
+        try {
             sender = getBanking().getClient(senderName);
             receiver = getBanking().getClient(receiverName);
 
             getBanking().transferMoney(sender, receiver, Double.parseDouble(amount));
-        }
-        catch (RuntimeException e)
-        {
+        } catch (RuntimeException e) {
             System.out.println(e.getMessage());
         }
     }

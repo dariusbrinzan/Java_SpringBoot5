@@ -14,8 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = BankApplication.class)
-public class BankApplicationTests3
-{
+public class BankApplicationTests3 {
     @Autowired
     private Banking banking;
 
@@ -25,16 +24,14 @@ public class BankApplicationTests3
     private Client client;
 
     @BeforeEach
-    public void init()
-    {
+    public void init() {
         client = banking.getClient("Jonny Bravo");
         client.setDefaultActiveAccountIfNotSet();
         client.getActiveAccount().setId(999);
     }
 
     @Test
-    public void depositToClient1()
-    {
+    public void depositToClient1() {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
         double amount = 100;
@@ -45,8 +42,7 @@ public class BankApplicationTests3
     }
 
     @Test
-    public void depositToClient2()
-    {
+    public void depositToClient2() {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
         double amount = 100;
@@ -57,8 +53,7 @@ public class BankApplicationTests3
     }
 
     @Test
-    public void getClientBalance()
-    {
+    public void getClientBalance() {
         Account account = client.getActiveAccount();
 
         double balance = bankingOperationsService.getBalance(client);
@@ -67,40 +62,36 @@ public class BankApplicationTests3
     }
 
     @Test
-    public void withdrawFromClient1()
-    {
+    public void withdrawFromClient1() {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
         double amount = 100;
 
 
-        bankingOperationsService.withdraw(client,amount);
+        bankingOperationsService.withdraw(client, amount);
 
         assertEquals(account.getBalance(), balance - amount);
     }
 
     @Test
-    public void withdrawFromClient2()
-    {
+    public void withdrawFromClient2() {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
         double amount = 100;
 
 
-        bankingOperationsService.withdraw(account,amount);
+        bankingOperationsService.withdraw(account, amount);
 
         assertEquals(account.getBalance(), balance - amount);
     }
 
     @Test
-    public void withdrawFromClient3()
-    {
+    public void withdrawFromClient3() {
         Account account = client.getActiveAccount();
         double balance = account.getBalance();
         double overdraft = 0;
 
-        if (account instanceof CheckingAccount)
-        {
+        if (account instanceof CheckingAccount) {
             overdraft = ((CheckingAccount) account).getOverdraft();
         }
 

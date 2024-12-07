@@ -6,8 +6,7 @@ import com.luxoft.bankapp.service.storage.Storage;
 import java.util.List;
 import java.util.Map;
 
-public interface BankReportService
-{
+public interface BankReportService {
     int getNumberOfBankClients();
 
     int getAccountsNumber();

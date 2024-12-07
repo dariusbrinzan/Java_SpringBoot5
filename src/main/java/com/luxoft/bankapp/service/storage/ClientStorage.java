@@ -7,15 +7,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class ClientStorage extends MapStorage<Client>
-{
+public class ClientStorage extends MapStorage<Client> {
     @Override
-    public Client getBy(String name)
-    {
-        for (Client client : getAll())
-        {
-            if (name.equals(client.getName()))
-            {
+    public Client getBy(String name) {
+        for (Client client : getAll()) {
+            if (name.equals(client.getName())) {
                 return client;
             }
         }
